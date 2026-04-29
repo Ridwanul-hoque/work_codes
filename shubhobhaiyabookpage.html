@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            background-color: #000;
+        }
+
+        .window {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden; /* This is the 'scissors' that cuts the edges */
+        }
+
+        iframe {
+            position: absolute;
+            
+            /* TOP CROP: Hides the website navbar */
+            top: -125px; 
+            
+            /* LEFT CROP: Keeps it clean */
+            left: -2px; 
+            
+            /* PUSH THE RIGHT SIDE: 
+               We make the iframe wider than the screen (105%) 
+               to push the "View Guides" and right-side UI off the edge. */
+            width: 105%; 
+            
+            /* PUSH THE BOTTOM: 
+               We make it taller to push "Ask Navi" off the bottom. */
+            height: calc(100% + 210px); 
+            
+            border: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="window">
+        <iframe 
+            src="https://www.visitloscabos.travel/los-cabos-360/" 
+            allow="gyroscope; accelerometer; fullscreen"
+            scrolling="no">
+        </iframe>
+    </div>
+
+</body>
+</html>

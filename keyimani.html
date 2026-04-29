@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pricing & Program Tiers</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Base Reset - Strictly 0 margin and padding for embed */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            background-color: transparent;
+            display: flex;
+            justify-content: center;
+            font-family: 'DM Sans', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Main Container */
+        .pricing-grid-wrapper {
+            width: 100%;
+            max-width: 1100px;
+            background-color: #0b172c; /* Dark Navy Background */
+            border-top: 3px solid #d4a820; /* Gold top line */
+            border-radius: 8px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            overflow: hidden;
+        }
+
+        /* Individual Column */
+        .pricing-col {
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        /* Remove border from the last column */
+        .pricing-col:last-child {
+            border-right: none;
+        }
+
+        /* Tags and Meta info */
+        .top-tag {
+            font-family: 'DM Mono', monospace;
+            color: #d4a820;
+            font-size: 10px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 15px;
+        }
+
+        .tier-title {
+            font-family: 'Playfair Display', serif;
+            color: #ffffff;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            line-height: 1.2;
+        }
+
+        .meta-info {
+            font-family: 'DM Mono', monospace;
+            color: #6b7494;
+            font-size: 9px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 25px;
+        }
+
+        /* Pricing Section */
+        .price-wrap {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            margin-bottom: 25px;
+        }
+
+        .price-amount {
+            font-family: 'Playfair Display', serif;
+            color: #d4a820;
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        .price-suffix {
+            color: #9ba4b5;
+            font-size: 13px;
+            font-weight: 400;
+        }
+
+        /* Quote / Description Block */
+        .desc-quote {
+            color: #a3b8cc; /* Light muted blue/grey */
+            font-size: 14px;
+            font-style: italic;
+            line-height: 1.5;
+            border-left: 2px solid rgba(255, 255, 255, 0.15);
+            padding-left: 15px;
+            margin-bottom: 30px;
+        }
+
+        /* Feature List */
+        .feature-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 35px;
+            flex-grow: 1; /* Pushes the button to the bottom */
+        }
+
+        .feature-item {
+            color: #a3b8cc;
+            font-size: 13px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            line-height: 1.5;
+        }
+
+        .feature-item::before {
+            content: "";
+            display: block;
+            width: 5px;
+            height: 5px;
+            background-color: #d4a820;
+            border-radius: 50%;
+            margin-top: 7px;
+            flex-shrink: 0;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            width: fit-content;
+            padding: 12px 24px;
+            font-size: 13px;
+            font-weight: 600;
+            border-radius: 6px;
+            text-decoration: none;
+            text-align: center;
+            transition: all 0.3s ease;
+            margin-top: auto; /* Aligns to bottom */
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: #d4a820;
+            border: 1px solid rgba(212, 168, 32, 0.5);
+        }
+
+        .btn-outline:hover {
+            background-color: rgba(212, 168, 32, 0.1);
+            border-color: #d4a820;
+        }
+
+        .btn-solid {
+            background-color: #d4a820;
+            color: #0b172c;
+            border: 1px solid #d4a820;
+        }
+
+        .btn-solid:hover {
+            background-color: #FAF0C0; /* Requested hover color from previous cards */
+            border-color: #FAF0C0;
+        }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 900px) {
+            .pricing-grid-wrapper {
+                grid-template-columns: 1fr; /* Stacks columns vertically on smaller screens */
+            }
+            .pricing-col {
+                border-right: none;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            }
+            .pricing-col:last-child {
+                border-bottom: none;
+            }
+        }
+
+        /* ----- MOBILE FONT SIZES ADDED HERE ----- */
+        @media (max-width: 480px) {
+            .pricing-col {
+                padding: 30px 20px;
+            }
+            .tier-title {
+                font-size: 18px; /* Max 18px for heading */
+            }
+            .price-amount {
+                font-size: 24px; /* Adjusted to balance with smaller title */
+            }
+            .top-tag,
+            .meta-info,
+            .price-suffix,
+            .desc-quote,
+            .feature-item {
+                font-size: 13px; /* All main text 13px */
+            }
+            .btn {
+                font-size: 12px; /* Button 12px */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="pricing-grid-wrapper">
+        
+        <div class="pricing-col">
+            <div class="top-tag">Entry Point</div>
+            <h2 class="tier-title">Free Webinar</h2>
+            <div class="meta-info">45 Minutes · Online · No Cost</div>
+            
+            <div class="price-wrap">
+                <span class="price-amount">Free</span>
+                <span class="price-suffix">— No Obligation</span>
+            </div>
+
+            <div class="desc-quote">"How to Write Your Book with AI Without Sounding Like AI" — Learn the A.U.T.H.O.R. method before committing to a program.</div>
+
+            <ul class="feature-list">
+                <li class="feature-item">Introduction to the AI Author Method</li>
+                <li class="feature-item">Why most people use AI wrong for writing</li>
+                <li class="feature-item">The 5-part book architecture system</li>
+                <li class="feature-item">Voice preservation techniques</li>
+                <li class="feature-item">Live Q&A with Dr. Alford</li>
+            </ul>
+
+            <a href="#" class="btn btn-outline">Register Free &rarr;</a>
+        </div>
+
+        <div class="pricing-col">
+            <div class="top-tag">Program 1 · Weeks 1-6</div>
+            <h2 class="tier-title">6-Week Manuscript Development Lab</h2>
+            <div class="meta-info">Live Cohort · 90 Min/Week · Online</div>
+            
+            <div class="price-wrap">
+                <span class="price-amount">$497</span>
+                <span class="price-suffix">— Founding Cohort Rate</span>
+            </div>
+
+            <div class="desc-quote">By the end of 6 weeks, you leave with a completed or substantially developed manuscript and a structured AI writing workflow — in your voice.</div>
+
+            <ul class="feature-list">
+                <li class="feature-item">Live weekly teaching sessions (~90 min each)</li>
+                <li class="feature-item">The A.U.T.H.O.R. AI writing framework</li>
+                <li class="feature-item">Manuscript structure & chapter blueprint</li>
+                <li class="feature-item">Story bank development</li>
+                <li class="feature-item">Voice calibration system for AI</li>
+                <li class="feature-item">AI prompt templates (Claude + ChatGPT)</li>
+                <li class="feature-item">Writing accountability & cohort community</li>
+                <li class="feature-item">Session replays included</li>
+            </ul>
+
+            <a href="https://www.keywordsunlocked.com/copy-of-contact-us?rc=test-site" target="_top" class="btn btn-solid">Enroll — $497 &rarr;</a>
+        </div>
+
+        <div class="pricing-col">
+            <div class="top-tag">Program 2 · Weeks 7-12</div>
+            <h2 class="tier-title">6-Week Publishing Lab</h2>
+            <div class="meta-info">Live Cohort · 90 Min/Week · Online</div>
+            
+            <div class="price-wrap">
+                <span class="price-amount">$497</span>
+                <span class="price-suffix">— Founding Cohort Rate</span>
+            </div>
+
+            <div class="desc-quote">Turn your completed manuscript into a professionally published book — formatted, distributed, and launched on your terms.</div>
+
+            <ul class="feature-list">
+                <li class="feature-item">Manuscript preparation & editing strategies</li>
+                <li class="feature-item">Formatting for print & eBook</li>
+                <li class="feature-item">ISBN, copyright & legal setup</li>
+                <li class="feature-item">Amazon KDP, IngramSpark, Draft2Digital</li>
+                <li class="feature-item">Cover design guidance</li>
+                <li class="feature-item">Pricing, metadata & category strategy</li>
+                <li class="feature-item">30-day pre-launch marketing plan</li>
+                <li class="feature-item">Live companion to Self-Publishing from Scratch</li>
+            </ul>
+
+           <a href="https://www.keywordsunlocked.com/copy-of-contact-us?rc=test-site" target="_parent" class="btn btn-solid">
+    Enroll — $497 &rarr;
+</a>
+        </div>
+
+    </div>
+
+</body>
+</html>

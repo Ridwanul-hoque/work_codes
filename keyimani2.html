@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dual Book Showcase</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Base Reset - Strictly 0 margin and padding for embed */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            background-color: transparent;
+            display: flex;
+            justify-content: center;
+            font-family: 'DM Sans', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Main Container Wrapper */
+        .dual-card-wrapper {
+            width: 100%;
+            max-width: 1100px;
+            display: flex;
+            flex-direction: row;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Enforce exactly 930px height on desktop */
+        @media (min-width: 901px) {
+            .dual-card-wrapper {
+                height: 930px;
+            }
+        }
+
+        /* Left Column - Dark Theme */
+        .card-left {
+            flex: 1;
+            background-color: #0b172c;
+            padding: 50px;
+            display: flex;
+            flex-direction: column;
+            color: #ffffff;
+        }
+
+        /* Right Column - Light Theme */
+        .card-right {
+            flex: 1;
+            background-color: #ffffff;
+            padding: 50px;
+            display: flex;
+            flex-direction: column;
+            color: #0b172c;
+        }
+
+        /* Common Elements */
+        .step-tag {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 20px;
+        }
+
+        .card-left .step-tag {
+            color: #6b7494;
+        }
+
+        .card-right .step-tag {
+            color: #9ba4b5;
+        }
+
+        .status-badge {
+            display: inline-block;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 6px 14px;
+            border-radius: 4px;
+            margin-bottom: 40px;
+            width: fit-content;
+        }
+
+        .card-left .status-badge {
+            background-color: #d4a820;
+            color: #0b172c;
+        }
+
+        .card-right .status-badge {
+            background-color: #e6f0fa;
+            color: #3d4966;
+        }
+
+        /* Book Cover Images */
+        .book-image-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+
+        .book-cover {
+            width: 100%;
+            max-width: 220px;
+            height: auto;
+            border-radius: 4px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-right .book-cover {
+            box-shadow: 0 15px 30px rgba(13, 27, 54, 0.1);
+        }
+
+        /* Typography */
+        .book-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 26px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            line-height: 1.2;
+        }
+
+        .book-subtitle {
+            font-size: 14px;
+            font-style: italic;
+            margin-bottom: 25px;
+            line-height: 1.4;
+        }
+
+        .card-left .book-subtitle {
+            color: #9ba4b5;
+        }
+
+        .card-right .book-subtitle {
+            color: #6b7494;
+        }
+
+        .book-desc {
+            font-size: 13.5px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .card-left .book-desc {
+            color: #a3b8cc;
+        }
+
+        .card-right .book-desc {
+            color: #3d4966;
+        }
+
+        /* Meta Information Table */
+        .meta-table {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 40px;
+            flex-grow: 1; /* Pushes button to bottom */
+        }
+
+        .meta-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+        }
+
+        .meta-label {
+            font-family: 'DM Mono', monospace;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 10px;
+        }
+
+        .card-left .meta-label {
+            color: #6b7494;
+        }
+
+        .card-right .meta-label {
+            color: #9ba4b5;
+        }
+
+        .meta-value {
+            font-weight: 500;
+            text-align: right;
+        }
+
+        .card-left .meta-value {
+            color: #ffffff;
+        }
+
+        .card-right .meta-value {
+            color: #0b172c;
+        }
+
+        /* Specific text colors */
+        .text-green {
+            color: #34d399 !important;
+            font-weight: 600;
+        }
+
+        .text-gold {
+            color: #d4a820 !important;
+            font-weight: 600;
+        }
+
+        /* Buttons */
+        .action-btn {
+            display: inline-block;
+            width: fit-content;
+            padding: 14px 28px;
+            font-size: 13px;
+            font-weight: 600;
+            border-radius: 6px;
+            text-decoration: none;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .btn-gold {
+            background-color: #d4a820;
+            color: #0b172c;
+        }
+
+        .btn-gold:hover {
+            background-color: #FAF0C0;
+        }
+
+        .btn-navy {
+            background-color: #0b172c;
+            color: #ffffff;
+        }
+
+        .btn-navy:hover {
+            background-color: #1a2a47;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 900px) {
+            .dual-card-wrapper {
+                flex-direction: column;
+                height: auto; /* Allow auto height on mobile */
+            }
+            .card-left, .card-right {
+                padding: 40px 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="dual-card-wrapper">
+        
+        <div class="card-left">
+            <div class="step-tag">Step 01 — The How-To Guide</div>
+            <div class="status-badge">Available Now</div>
+            
+            <div class="book-image-container">
+                <img src="https://static.wixstatic.com/media/1d684a_fb8dd065c05d45498a4ce09f867809e5~mv2.png" alt="Self-Publishing from Scratch" class="book-cover">
+            </div>
+
+            <h2 class="book-title">Self-Publishing from Scratch</h2>
+            <div class="book-subtitle">A Practical Guide for Authors to Publish Successfully with Insights for Black Voices</div>
+
+            <p class="book-desc">Your no-fluff companion for turning a book idea into a polished, professional release. A clear start-to-finish roadmap through Creation, Polish, Presentation, and Promotion — with real tools, templates, checklists, and AI prompts you can use immediately without losing your voice.</p>
+
+            <div class="meta-table">
+                <div class="meta-row">
+                    <span class="meta-label">Author</span>
+                    <span class="meta-value">Dr. Keyimani L. Alford</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">Publisher</span>
+                    <span class="meta-value">Keywords Unlocked</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">Genre</span>
+                    <span class="meta-value">Nonfiction • Self-Publishing</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">Format</span>
+                    <span class="meta-value">Paperback • eBook</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">Status</span>
+                    <span class="meta-value text-green">Available Now</span>
+                </div>
+            </div>
+
+            <a href="https://www.amazon.com/dp/B0FVFCSTZQ?_encoding=UTF8&psc=1&ref=cm_sw_r_ffobk_cp_ud_dp_FJCW1ADDPJGT88QN5ADB&ref_=cm_sw_r_ffobk_cp_ud_dp_FJCW1ADDPJGT88QN5ADB&social_share=cm_sw_r_ffobk_cp_ud_dp_FJCW1ADDPJGT88QN5ADB&bestFormat=true" target="_blank" class="action-btn btn-gold">Get Your Copy on Amazon &rarr;</a>
+        </div>
+
+        <div class="card-right">
+            <div class="step-tag">Step 02 — The Reality Check</div>
+            <div class="status-badge">Coming June 16, 2026</div>
+            
+            <div class="book-image-container">
+                <img src="https://static.wixstatic.com/media/1d684a_39d5d99797e14ec497e5e3deaca8bfd0~mv2.png" alt="Wait One Minute" class="book-cover">
+            </div>
+
+            <h2 class="book-title">Wait One Minute</h2>
+            <div class="book-subtitle">15 Hard Truths the Self-Publishing Business Doesn't Tell Authors</div>
+
+            <p class="book-desc">You followed the steps. You published your book. Now what? This is the guide for what happens after the launch — the visibility challenges, the sales realities, the marketing gaps, and the mindset shifts that separate authors who sustain from authors who stall.</p>
+
+            <div class="meta-table">
+                <div class="meta-row">
+                    <span class="meta-label">Author</span>
+                    <span class="meta-value">Keyimani Alford</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">Publisher</span>
+                    <span class="meta-value">Keywords Unlocked</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">Genre</span>
+                    <span class="meta-value">Nonfiction • Publishing</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">Release</span>
+                    <span class="meta-value">June 16, 2026</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">Status</span>
+                    <span class="meta-value text-gold">Notify Me at Launch</span>
+                </div>
+            </div>
+
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSfJOdd8qU6XnH4xeu0Kn5JeiStacfAV93d2ICG0U7KuHFgsNA/viewform" target="_blank" class="action-btn btn-navy">Get Notified at Launch &rarr;</a>
+        </div>
+
+    </div>
+
+</body>
+</html>

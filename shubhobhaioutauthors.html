@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Collection Full Grid</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            background-color: transparent;
+            display: flex;
+            justify-content: center;
+            font-family: 'DM Sans', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .grid-wrapper {
+            width: 100%;
+            max-width: 1100px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 24px;
+            justify-content: flex-start;
+        }
+
+        .book-card {
+            width: calc((100% - 48px) / 3); 
+            height: 455px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            border: 1px solid #e8edf8;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            text-decoration: none;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .book-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Top Image Section - UNIFIED BACKGROUND APPLIED HERE */
+        .card-top {
+            height: 200px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background-color: #ffffff; /* All backgrounds are now this uniform color */
+        }
+
+        .book-image {
+            height: 135px;
+            width: auto;
+            border-radius: 4px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s ease;
+        }
+
+        .book-card:hover .book-image {
+            transform: scale(1.05);
+        }
+
+        .badge-red {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background-color: #8b1014;
+            color: #ffffff;
+            padding: 4px 6px;
+            font-size: 9px;
+            font-weight: 700;
+            border-radius: 2px;
+            letter-spacing: 1px;
+        }
+
+        /* Bottom Content Section */
+        .card-bottom {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .tags-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .tag-dark {
+            background-color: #0b172c;
+            color: #ffffff;
+            font-size: 9px;
+            font-weight: 700;
+            padding: 4px 8px;
+            border-radius: 2px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .tag-light {
+            background-color: #d4f5ea;
+            color: #0a8f6e;
+            font-size: 9px;
+            font-weight: 700;
+            padding: 4px 8px;
+            border-radius: 2px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Special Tag for upcoming dates */
+        .tag-upcoming {
+            background-color: #fce8e8;
+            color: #8b1014;
+            font-size: 9px;
+            font-weight: 700;
+            padding: 4px 8px;
+            border-radius: 2px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .book-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: #0b172c;
+            margin-bottom: 6px;
+            line-height: 1.25;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .book-author {
+            font-size: 12px;
+            color: #6b7494;
+            margin-bottom: 12px;
+        }
+
+        .book-desc {
+            font-size: 13px;
+            color: #3d4966;
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        /* Footer */
+        .card-footer {
+            margin-top: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 15px;
+            border-top: 1px solid #e8edf8;
+        }
+
+        .status-text {
+            font-size: 12px;
+            color: #6b7494;
+        }
+
+        .view-link {
+            font-size: 13px;
+            color: #0a8f6e;
+            font-weight: 600;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 900px) {
+            .book-card {
+                width: calc((100% - 24px) / 2);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .book-card {
+                width: 100%;
+            }
+            .grid-wrapper {
+                padding: 0 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="grid-wrapper">
+
+        <a href="https://www.keywordsunlocked.com/portfolio-collections/authorbooks/mile-markers-of-life-a-100-day-christian-devotional-for-direction-and-strength/?rc=test-site" target="_top" class="book-card">
+            <div class="card-top">
+                <img src="https://static.wixstatic.com/media/1d684a_9d7b98ce0c1f485da0c70c91699005e6~mv2.png" alt="Mile Markers of Life" class="book-image">
+            </div>
+            <div class="card-bottom">
+                <div class="tags-row">
+                    <span class="tag-dark">Devotional</span>
+                    <span class="tag-light">Available Now</span>
+                </div>
+                <h2 class="book-title">Mile Markers of Life: A 100-Day Christian Devotional</h2>
+                <div class="book-author">Dr. Keyimani L. Alford</div>
+                <div class="book-desc">A 100-day devotional inspired by commutes and quiet moments on the road — each mile marker a prompt for reflection, faith, and forward motion.</div>
+                <div class="card-footer">
+                    <span class="status-text">Available Now</span>
+                    <span class="view-link">View Book &rarr;</span>
+                </div>
+            </div>
+        </a>
+
+        <a href="https://www.keywordsunlocked.com/portfolio-collections/authorbooks/untitled-project-318696/?rc=test-site" target="_top" class="book-card">
+            <div class="card-top">
+                <img src="https://static.wixstatic.com/media/6736d8_db3a034cfe4849619bd4ccb9714cd2cd~mv2.jpg" alt="Unshaken Leadership" class="book-image">
+            </div>
+            <div class="card-bottom">
+                <div class="tags-row">
+                    <span class="tag-dark">Leadership</span>
+                    <span class="tag-light">Available Now</span>
+                </div>
+                <h2 class="book-title">Unshaken Leadership</h2>
+                <div class="book-author">Dr. Keyimani L. Alford</div>
+                <div class="book-desc">A 14-chapter leadership guide for those who want to lead with purpose, resilience, and authentic authority.</div>
+                <div class="card-footer">
+                    <span class="status-text">Available Now</span>
+                    <span class="view-link">View Book &rarr;</span>
+                </div>
+            </div>
+        </a>
+
+        <a href="https://www.keywordsunlocked.com/portfolio-collections/authorbooks/untitled-project-1a63e1/?rc=test-site" target="_top" class="book-card">
+            <div class="card-top">
+                <div class="badge-red">2ND ED.</div>
+                <img src="https://static.wixstatic.com/media/6736d8_575c6d9719194b3a856b53e362b9dd76~mv2.png" alt="Oakland Hills, Milwaukee Rivers" class="book-image">
+            </div>
+            <div class="card-bottom">
+                <div class="tags-row">
+                    <span class="tag-dark">Memoir</span>
+                    <span class="tag-light">Available Now</span>
+                </div>
+                <h2 class="book-title">Oakland Hills, Milwaukee Rivers — Second Edition</h2>
+                <div class="book-author">Dr. Keyimani L. Alford</div>
+                <div class="book-desc">A memoir of survival, identity, and purpose — from the hills of Oakland to the rivers of Milwaukee.</div>
+                <div class="card-footer">
+                    <span class="status-text">Available Now</span>
+                    <span class="view-link">View Book &rarr;</span>
+                </div>
+            </div>
+        </a>
+
+        <a href="https://www.keywordsunlocked.com/portfolio-collections/authorbooks/think-speak-manifest/?rc=test-site" target="_top" class="book-card">
+            <div class="card-top">
+                <img src="https://static.wixstatic.com/media/6736d8_4a323487599942b29593f414fbd83d65~mv2.png" alt="Think. Speak. Manifest." class="book-image">
+            </div>
+            <div class="card-bottom">
+                <div class="tags-row">
+                    <span class="tag-dark">Self-Help</span>
+                    <span class="tag-light">Available Now</span>
+                </div>
+                <h2 class="book-title">Think. Speak. Manifest.</h2>
+                <div class="book-author">Keywords Unlocked Author</div>
+                <div class="book-desc">A practical guide to aligning your thoughts, words, and intentions to create real, lasting change in your everyday life.</div>
+                <div class="card-footer">
+                    <span class="status-text">Available Now</span>
+                    <span class="view-link">View Book &rarr;</span>
+                </div>
+            </div>
+        </a>
+
+        <a href="https://www.keywordsunlocked.com/portfolio-collections/authorbooks/nothing-wasted-losing-my-dream-to-find-gods-purpose-christian-memoir/?rc=test-site" target="_top" class="book-card">
+            <div class="card-top">
+                <img src="https://static.wixstatic.com/media/6736d8_e65bf79445554dc1899ebdacb2dbd838~mv2.png" alt="Nothing Wasted" class="book-image">
+            </div>
+            <div class="card-bottom">
+                <div class="tags-row">
+                    <span class="tag-dark">Christian Memoir</span>
+                    <span class="tag-light">Available Now</span>
+                </div>
+                <h2 class="book-title">Nothing Wasted: Losing My Dream to Find God's Purpose</h2>
+                <div class="book-author">Keywords Unlocked Author</div>
+                <div class="book-desc">A Christian memoir about releasing the dream you planned and discovering the one God had waiting.</div>
+                <div class="card-footer">
+                    <span class="status-text">Available Now</span>
+                    <span class="view-link">View Book &rarr;</span>
+                </div>
+            </div>
+        </a>
+
+        <a href="#" target="_top" class="book-card">
+            <div class="card-top">
+                <img src="https://static.wixstatic.com/media/6736d8_389848befc1e4c6197fb2361595e2fff~mv2.png" alt="You Can't Make This FAFSA Up" class="book-image">
+            </div>
+            <div class="card-bottom">
+                <div class="tags-row">
+                    <span class="tag-dark">Higher Ed Humor</span>
+                    <span class="tag-upcoming">Fall 2026</span>
+                </div>
+                <h2 class="book-title">You Can't Make This FAFSA Up</h2>
+                <div class="book-author">Keywords Unlocked Author</div>
+                <div class="book-desc">Hilarious, heartfelt stories from behind the financial aid counter — for anyone who has ever navigated the chaos of higher education.</div>
+                <div class="card-footer">
+                    <span class="status-text">Upcoming Release</span>
+                    <span class="view-link" style="color:#0b172c;">View Book &rarr;</span>
+                </div>
+            </div>
+        </a>
+
+        <a href="https://www.keywordsunlocked.com/portfolio-collections/authorbooks/untitled-project-a2a2b4/?rc=test-site" target="_top" class="book-card">
+            <div class="card-top">
+                <img src="https://static.wixstatic.com/media/6736d8_a485571d30464fc88094f2154d3cc562~mv2.png" alt="The Healing Companion" class="book-image">
+            </div>
+            <div class="card-bottom">
+                <div class="tags-row">
+                    <span class="tag-dark">Guided Journal</span>
+                    <span class="tag-light">Available Now</span>
+                </div>
+                <h2 class="book-title">The Healing Companion: A Guided Journal</h2>
+                <div class="book-author">Keywords Unlocked Author</div>
+                <div class="book-desc">A guided journal designed for those in the middle of the hard work of healing — with prompts that meet you exactly where you are.</div>
+                <div class="card-footer">
+                    <span class="status-text">Available Now</span>
+                    <span class="view-link">View Book &rarr;</span>
+                </div>
+            </div>
+        </a>
+
+        <a href="https://www.keywordsunlocked.com/portfolio-collections/authorbooks/untitled-project-1c8189/?rc=test-site" target="_top" class="book-card">
+            <div class="card-top">
+                <img src="https://static.wixstatic.com/media/6736d8_e2bc00d1d3ed4de1919171de6840e562~mv2.png" alt="Ultimate Motivational Planner" class="book-image">
+            </div>
+            <div class="card-bottom">
+                <div class="tags-row">
+                    <span class="tag-dark">Planner</span>
+                    <span class="tag-light">Available Now</span>
+                </div>
+                <h2 class="book-title">Keywords Unlocked 2025–2026 Ultimate Motivational Monthly Planner</h2>
+                <div class="book-author">Keywords Unlocked Publishers</div>
+                <div class="book-desc">A motivational monthly planner with purpose-driven prompts to keep your goals visible and momentum going.</div>
+                <div class="card-footer">
+                    <span class="status-text">Available Now</span>
+                    <span class="view-link">View Book &rarr;</span>
+                </div>
+            </div>
+        </a>
+
+        <a href="https://www.keywordsunlocked.com/portfolio-collections/authorbooks/untitled-project-659834/?rc=test-site" target="_top" class="book-card">
+            <div class="card-top">
+                <img src="https://static.wixstatic.com/media/6736d8_06fbcbd6aa264d4c876a6ead27be81d6~mv2.png" alt="Self-Publishing from Scratch" class="book-image">
+            </div>
+            <div class="card-bottom">
+                <div class="tags-row">
+                    <span class="tag-dark">Publishing</span>
+                    <span class="tag-light">Available Now</span>
+                </div>
+                <h2 class="book-title">Self-Publishing from Scratch</h2>
+                <div class="book-author">Dr. Keyimani L. Alford</div>
+                <div class="book-desc">The complete roadmap for authors who want to publish on their own terms — covering every stage from manuscript to market.</div>
+                <div class="card-footer">
+                    <span class="status-text">Available Now</span>
+                    <span class="view-link">View Book &rarr;</span>
+                </div>
+            </div>
+        </a>
+
+        <a href="https://www.keywordsunlocked.com/portfolio-collections/authorbooks/ohmr-workbook-a-guide-for-faith-and-biblical-application/?rc=test-site" target="_top" class="book-card">
+            <div class="card-top">
+                <img src="https://static.wixstatic.com/media/6736d8_7265b8db66a640e0838cda6fd9eddfb2~mv2.jpg" alt="OHMR Workbook" class="book-image">
+            </div>
+            <div class="card-bottom">
+                <div class="tags-row">
+                    <span class="tag-dark">Devotional Workbook</span>
+                    <span class="tag-light">Available Now</span>
+                </div>
+                <h2 class="book-title">OHMR Workbook: A Guide for Faith and Biblical Application</h2>
+                <div class="book-author">Dr. Keyimani L. Alford</div>
+                <div class="book-desc">The companion workbook to Oakland Hills, Milwaukee Rivers — structured for individual reflection and small group Bible study application.</div>
+                <div class="card-footer">
+                    <span class="status-text">Available Now</span>
+                    <span class="view-link">View Book &rarr;</span>
+                </div>
+            </div>
+        </a>
+        <a href="#" target="_top" class="book-card">
+            <div class="card-top">
+                <img src="https://static.wixstatic.com/media/1d684a_39d5d99797e14ec497e5e3deaca8bfd0~mv2.png" alt="Wait One Minute" class="book-image">
+            </div>
+            <div class="card-bottom">
+                <div class="tags-row">
+                    <span class="tag-dark">Publishing</span>
+                    <span class="tag-upcoming">June 16, 2026</span>
+                </div>
+                <h2 class="book-title">Wait One Minute</h2>
+                <div class="book-author">Keyimani Alford</div>
+                <div class="book-desc">15 Hard Truths The Self-Publishing Business Doesn't Tell Authors.</div>
+                <div class="card-footer">
+                    <span class="status-text">Upcoming Release</span>
+                    <span class="view-link" style="color:#0b172c;">View Book &rarr;</span>
+                </div>
+            </div>
+        </a>
+
+    </div>
+
+</body>
+</html>

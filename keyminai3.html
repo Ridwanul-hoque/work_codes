@@ -1,0 +1,418 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Sidebar Book Details</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@700&display=swap"
+            rel="stylesheet"
+        />
+
+        <style>
+            /* Base Reset */
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            body,
+            html {
+                background-color: transparent;
+                display: flex;
+                justify-content: center;
+                font-family: "DM Sans", sans-serif;
+                margin: 0;
+                padding: 0;
+                width: 100%;
+            }
+
+            /* Sidebar Wrapper - 25% of 1100px is 275px */
+            .sidebar-wrapper {
+                width: 100%;
+                max-width: 275px;
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            /* --- Dark Card (Launch) --- */
+            .card-dark {
+                background: linear-gradient(180deg, #16192b 0%, #10131f 100%);
+                border-radius: 12px;
+                padding: 24px 20px;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .dark-title {
+                font-family: "Playfair Display", serif;
+                color: #ffffff;
+                font-size: 22px;
+                font-weight: 700;
+                margin-bottom: 12px;
+                line-height: 1.2;
+            }
+
+            .dark-text {
+                color: #a0a6b5;
+                font-size: 13px;
+                line-height: 1.5;
+                margin-bottom: 20px;
+            }
+
+            .btn-gold {
+                background-color: #d4a820;
+                color: #10131f;
+                padding: 12px;
+                border-radius: 6px;
+                text-align: center;
+                text-decoration: none;
+                font-weight: 600;
+                font-size: 13px;
+                margin-bottom: 10px;
+                transition: background-color 0.3s ease;
+            }
+
+            .btn-gold:hover {
+                background-color: #f3c63e;
+            }
+
+            .btn-outline-dark {
+                background-color: transparent;
+                color: #a0a6b5;
+                border: 1px solid #363b4d;
+                padding: 12px;
+                border-radius: 6px;
+                text-align: center;
+                text-decoration: none;
+                font-weight: 500;
+                font-size: 13px;
+                transition: all 0.3s ease;
+            }
+
+            .btn-outline-dark:hover {
+                background-color: #1a1e2d;
+                color: #ffffff;
+                border-color: #505770;
+            }
+
+            /* --- Light Cards (Details, Author, Share) --- */
+            .card-light {
+                background-color: #ffffff;
+                border: 1px solid #e8edf8;
+                border-radius: 12px;
+                display: flex;
+                flex-direction: column;
+                overflow: hidden;
+            }
+
+            /* Book Details Specifics */
+            .card-header-small {
+                background-color: #f8fafc;
+                padding: 15px 20px;
+                border-bottom: 1px solid #e8edf8;
+                font-family: "DM Mono", monospace;
+                font-size: 10px;
+                font-weight: 500;
+                color: #6b7494;
+                letter-spacing: 1.5px;
+                text-transform: uppercase;
+            }
+
+            .details-list {
+                padding: 5px 20px;
+            }
+
+            .detail-row {
+                display: flex;
+                justify-content: space-between;
+                padding: 15px 0;
+                border-bottom: 1px solid #f0f3f8;
+                font-size: 12.5px;
+            }
+
+            .detail-row:last-child {
+                border-bottom: none;
+            }
+
+            .detail-label {
+                color: #6b7494;
+                width: 35%;
+            }
+
+            .detail-value {
+                color: #0b172c;
+                font-weight: 500;
+                text-align: right;
+                width: 65%;
+                line-height: 1.4;
+            }
+
+            /* Author Profile Specifics */
+            .author-box {
+                padding: 20px;
+            }
+
+            .author-header {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                margin-bottom: 15px;
+            }
+
+            .author-avatar {
+                width: 45px;
+                height: 45px;
+                border-radius: 50%;
+                background-color: #151824;
+                color: #938ab0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-family: "Playfair Display", serif;
+                font-size: 18px;
+                font-weight: 700;
+                flex-shrink: 0;
+            }
+
+            .author-info h3 {
+                font-family: "Playfair Display", serif;
+                color: #0b172c;
+                font-size: 16px;
+                margin-bottom: 4px;
+            }
+
+            .author-info p {
+                color: #6b7494;
+                font-size: 11px;
+                line-height: 1.3;
+            }
+
+            .author-bio {
+                color: #3d4966;
+                font-size: 13px;
+                line-height: 1.6;
+                margin-bottom: 15px;
+            }
+
+            .text-link {
+                color: #0a8f6e;
+                font-size: 13px;
+                font-weight: 500;
+                text-decoration: none;
+                display: inline-block;
+            }
+
+            .text-link:hover {
+                text-decoration: underline;
+            }
+
+            /* Share Buttons Specifics */
+            .share-box {
+                padding: 0 20px 20px 20px;
+            }
+
+            .share-header {
+                padding: 20px 20px 15px 20px;
+                font-family: "DM Mono", monospace;
+                font-size: 10px;
+                font-weight: 500;
+                color: #6b7494;
+                letter-spacing: 1.5px;
+                text-transform: uppercase;
+            }
+
+            .share-buttons {
+                display: flex;
+                gap: 8px;
+            }
+
+            .btn-share {
+                flex: 1;
+                background-color: #ffffff;
+                border: 1px solid #e8edf8;
+                color: #3d4966;
+                font-family: "DM Sans", sans-serif;
+                font-size: 11px;
+                padding: 10px 0;
+                border-radius: 4px;
+                cursor: pointer;
+                text-align: center;
+                transition: all 0.2s ease;
+            }
+
+            .btn-share:hover {
+                border-color: #a0a6b5;
+                color: #0b172c;
+            }
+
+            /* Responsive */
+            @media (max-width: 600px) {
+                .sidebar-wrapper {
+                    max-width: 100%;
+                    padding: 15px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="sidebar-wrapper">
+            <div class="card-dark">
+                <h2 class="dark-title">Be part of the launch.</h2>
+                <p class="dark-text">
+                    Join the launch team for early access, exclusive updates,
+                    and a chance to be among the first readers to enter Kareem's
+                    world.
+                </p>
+                <a
+                    href="https://docs.google.com/forms/d/e/1FAIpQLScllwRHx4izjY_marrqKFiXqbQnD5ojnHAwkFclGlQAQjNt8Q/viewform"
+                    target="_top"
+                    class="btn-gold"
+                    >Join the Launch Team &rarr;</a
+                >
+                <a
+                    href="https://www.keywordsunlocked.com/category/all-products"
+                    target="_top"
+                    class="btn-outline-dark"
+                    >Browse the Shop</a
+                >
+            </div>
+
+            <div class="card-light">
+                <div class="card-header-small">Book Details</div>
+                <div class="details-list">
+                    <div class="detail-row">
+                        <div class="detail-label">Author</div>
+                        <div class="detail-value">L.K. West</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Publisher</div>
+                        <div class="detail-value">Keywords Unlocked</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Genre</div>
+                        <div class="detail-value">Psychological Suspense</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Release Date</div>
+                        <div class="detail-value">May 19, 2026</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Series</div>
+                        <div class="detail-value">The Find Out Trilogy, #1</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Format</div>
+                        <div class="detail-value">Paperback &middot; eBook</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Price</div>
+                        <div class="detail-value">TBD</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Available At</div>
+                        <div class="detail-value">
+                            Amazon &middot; Keywords Unlocked Shop
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-light">
+                <div class="author-box">
+                    <div class="author-header">
+                        <div class="author-avatar">LW</div>
+                        <div class="author-info">
+                            <h3>L.K. West</h3>
+                            <p>Psychological Suspense Author</p>
+                        </div>
+                    </div>
+                    <p class="author-bio">
+                       l. k. west is a private observer of human behavior who writes at the intersection of power, secrecy, and consequence. Drawing inspiration from real situations and lived tension, West explores how silence forms, how desire distorts, and how easily truth becomes collateral damage.
+A former participant and close observer of faith spaces, West writes with an insider’s awareness and an outsider’s restraint. If They Find Out is part of a growing body of work that examines what happens when intimacy, belief, and control collide. West writes to amplify real stories often left unnamed.
+                    </p>
+                    <a href="https://www.keywordsunlocked.com/copy-of-about-us?rc=test-site" target="_top" class="text-link"
+                        >View author profile &rarr;</a
+                    >
+                </div>
+            </div>
+
+            <div class="card-light">
+                <div class="share-header">Share This Book</div>
+                <div class="share-box">
+                    <div class="share-buttons">
+                        <button id="copyBtn" class="btn-share">
+                            Copy Link
+                        </button>
+                        <button id="twBtn" class="btn-share">
+                            Twitter / X
+                        </button>
+                        <button id="fbBtn" class="btn-share">Facebook</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            // Getting the actual page URL from within the iframe
+            const getPageUrl = () => {
+                return window.top !== window.self && document.referrer
+                    ? document.referrer
+                    : window.location.href;
+            };
+
+            const currentUrl = getPageUrl();
+
+            // Copy Link Functionality
+            const copyBtn = document.getElementById("copyBtn");
+            copyBtn.addEventListener("click", () => {
+                // Fallback copy method for iframes
+                try {
+                    const tempInput = document.createElement("input");
+                    tempInput.value = currentUrl;
+                    document.body.appendChild(tempInput);
+                    tempInput.select();
+                    document.execCommand("copy");
+                    document.body.removeChild(tempInput);
+                } catch (err) {
+                    console.log("Copy attempted manually.");
+                }
+
+                // Always show Copied UI visually regardless of technical success
+                copyBtn.innerText = "Copied!";
+                copyBtn.style.backgroundColor = "#d4f5ea";
+                copyBtn.style.color = "#0a8f6e";
+                copyBtn.style.borderColor = "#0a8f6e";
+
+                setTimeout(() => {
+                    copyBtn.innerText = "Copy Link";
+                    copyBtn.style.backgroundColor = "";
+                    copyBtn.style.color = "";
+                    copyBtn.style.borderColor = "";
+                }, 2000);
+            });
+
+            // Twitter Share
+            document.getElementById("twBtn").addEventListener("click", () => {
+                window.open(
+                    "https://twitter.com/intent/tweet?url=" +
+                        encodeURIComponent(currentUrl),
+                    "_blank",
+                );
+            });
+
+            // Facebook Share
+            document.getElementById("fbBtn").addEventListener("click", () => {
+                window.open(
+                    "https://www.facebook.com/sharer/sharer.php?u=" +
+                        encodeURIComponent(currentUrl),
+                    "_blank",
+                );
+            });
+        </script>
+    </body>
+</html>

@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:#f0ede8;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:40px 16px 60px}
+.page-label{text-transform:uppercase;letter-spacing:.15em;font-size:12px;color:#6b7280;margin-bottom:8px}
+h1{font-family:'Playfair Display',serif;font-size:clamp(26px,5vw,40px);color:#111;margin-bottom:8px}
+.subtitle{font-size:14px;color:#6b7280;margin-bottom:32px}
+
+.stepper{display:flex;align-items:flex-start;width:100%;max-width:560px;margin-bottom:28px}
+.step-item{display:flex;flex-direction:column;align-items:center;flex:1;position:relative}
+.step-item:not(:last-child)::after{content:'';position:absolute;top:17px;left:50%;width:100%;height:2px;background:#d1d5db;z-index:0}
+.step-item.done:not(:last-child)::after,.step-item.active:not(:last-child)::after{background:#2d6a4f}
+.step-circle{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;border:2px solid #d1d5db;background:#fff;color:#9ca3af;position:relative;z-index:1;transition:all .25s}
+.step-item.done .step-circle{background:#2d6a4f;border-color:#2d6a4f;color:#fff}
+.step-item.active .step-circle{background:#2d6a4f;border-color:#2d6a4f;color:#fff}
+.step-label{font-size:11px;margin-top:5px;color:#9ca3af;text-align:center}
+.step-item.active .step-label,.step-item.done .step-label{color:#374151;font-weight:500}
+
+.card{background:#fff;border-radius:16px;padding:32px;width:100%;max-width:700px;box-shadow:0 2px 16px rgba(0,0,0,.06)}
+.page{display:none}.page.active{display:block}
+
+.services-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:14px;margin-top:18px}
+.service-card{border:1.5px solid #e5e7eb;border-radius:12px;padding:18px 14px;cursor:pointer;transition:border-color .2s,box-shadow .2s}
+.service-card:hover{border-color:#2d6a4f;box-shadow:0 0 0 3px rgba(45,106,79,.08)}
+.service-card.selected{border-color:#2d6a4f;box-shadow:0 0 0 3px rgba(45,106,79,.12)}
+.svc-icon{font-size:22px;margin-bottom:10px;display:block}
+.svc-name{font-weight:600;font-size:14px;color:#111;margin-bottom:3px}
+.svc-meta{font-size:12px;color:#6b7280}
+.step-footer{display:flex;justify-content:space-between;align-items:center;margin-top:24px;padding-top:18px;border-top:1px solid #f3f4f6}
+.step-count{font-size:13px;color:#6b7280}
+
+.btn-primary{background:#2d6a4f;color:#fff;border:none;border-radius:8px;padding:11px 24px;font-size:14px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:background .2s;font-family:'DM Sans',sans-serif}
+.btn-primary:hover{background:#245a42}
+.btn-primary:disabled{background:#a7c4b5;cursor:not-allowed}
+.btn-outline{background:transparent;color:#374151;border:1.5px solid #d1d5db;border-radius:8px;padding:11px 18px;font-size:14px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif}
+.btn-outline:hover{border-color:#9ca3af}
+
+.dt-layout{display:flex;gap:20px;flex-wrap:wrap;margin-top:18px}
+.calendar-wrap{flex:1;min-width:230px}
+.cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.cal-header span{font-weight:600;font-size:14px}
+.cal-nav{background:none;border:1.5px solid #e5e7eb;border-radius:6px;width:28px;height:28px;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center}
+.cal-nav:hover{border-color:#9ca3af}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);text-align:center}
+.cal-dname{font-size:11px;color:#9ca3af;padding:5px 0;font-weight:500}
+.cal-day{font-size:13px;border-radius:50%;cursor:pointer;color:#374151;transition:background .12s;width:32px;height:32px;display:flex;align-items:center;justify-content:center;margin:1px auto}
+.cal-day:hover:not(.disabled):not(.empty){background:#d1fae5}
+.cal-day.today{font-weight:700;color:#2d6a4f}
+.cal-day.selected{background:#2d6a4f!important;color:#fff!important}
+.cal-day.disabled{color:#d1d5db;cursor:default}
+.cal-day.empty{cursor:default}
+.times-wrap{flex:1;min-width:190px}
+.times-label{font-size:13px;font-weight:600;margin-bottom:10px;color:#374151}
+.times-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.time-btn{border:1.5px solid #e5e7eb;border-radius:8px;padding:9px 4px;font-size:12px;font-weight:500;cursor:pointer;background:#fff;color:#374151;transition:all .12s;text-align:center;font-family:'DM Sans',sans-serif}
+.time-btn:hover:not(.booked){border-color:#2d6a4f;color:#2d6a4f}
+.time-btn.selected{background:#2d6a4f;color:#fff;border-color:#2d6a4f}
+.time-btn.booked{color:#9ca3af;text-decoration:line-through;cursor:default;border-color:#f3f4f6;background:#fafafa;font-size:11px}
+
+.details-layout{display:flex;gap:24px;flex-wrap:wrap}
+.details-form{flex:2;min-width:240px}
+.form-row{display:flex;gap:12px}
+.form-group{display:flex;flex-direction:column;gap:5px;margin-bottom:14px;flex:1}
+.form-group label{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#6b7280}
+.form-group input,.form-group textarea{border:1.5px solid #e5e7eb;border-radius:8px;padding:11px 12px;font-size:13px;font-family:'DM Sans',sans-serif;color:#111;outline:none;transition:border-color .15s;resize:vertical}
+.form-group input:focus,.form-group textarea:focus{border-color:#2d6a4f}
+.form-group textarea{min-height:90px}
+.booking-summary{flex:1;min-width:180px}
+.summary-box{background:#f9fafb;border-radius:12px;padding:18px}
+.summ-title{font-size:10px;text-transform:uppercase;letter-spacing:.1em;font-weight:600;color:#9ca3af;margin-bottom:14px}
+.summ-row{display:flex;flex-direction:column;margin-bottom:12px;gap:2px}
+.summ-row .sl{font-size:11px;color:#9ca3af}
+.summ-row .sv{font-weight:600;color:#111;font-size:13px}
+
+.confirmed-wrap{text-align:center;padding:8px 0}
+.check-big{width:60px;height:60px;background:#d1fae5;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 18px;font-size:24px}
+.confirmed-wrap h2{font-family:'Playfair Display',serif;font-size:24px;margin-bottom:8px}
+.confirmed-wrap p{font-size:13px;color:#6b7280;max-width:340px;margin:0 auto 20px}
+.conf-summary{background:#f9fafb;border-radius:12px;padding:18px;max-width:380px;margin:0 auto 24px;text-align:left}
+.conf-row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid #e5e7eb;font-size:13px}
+.conf-row:last-child{border-bottom:none}
+.conf-row .cl{color:#6b7280}.conf-row .cr{font-weight:600;color:#111}
+
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);background:#111;color:#fff;padding:11px 22px;border-radius:999px;font-size:13px;font-weight:500;transition:transform .3s;z-index:999;white-space:nowrap}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.spinner-wrap{text-align:center;padding:30px;color:#6b7280;font-size:13px;grid-column:span 2}
+.spinner{width:28px;height:28px;border:3px solid #e5e7eb;border-top-color:#2d6a4f;border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 10px}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media(max-width:500px){.card{padding:20px 14px}.dt-layout,.details-layout,.form-row{flex-direction:column}}
+</style>
+</head>
+<body>
+
+<p class="page-label">Schedule a Visit</p>
+<h1>Book an Appointment</h1>
+<p class="subtitle">Choose a service, pick a date and time, and confirm your details.</p>
+
+<div class="stepper">
+  <div class="step-item active" id="si1"><div class="step-circle" id="sc1">1</div><div class="step-label">Service</div></div>
+  <div class="step-item" id="si2"><div class="step-circle" id="sc2">2</div><div class="step-label">Date &amp; Time</div></div>
+  <div class="step-item" id="si3"><div class="step-circle" id="sc3">3</div><div class="step-label">Your Details</div></div>
+  <div class="step-item" id="si4"><div class="step-circle" id="sc4">4</div><div class="step-label">Confirmed</div></div>
+</div>
+
+<div class="card">
+
+  <!-- STEP 1 -->
+  <div class="page active" id="p1">
+    <h3 style="font-size:17px;font-weight:700">Choose a service</h3>
+    <p style="font-size:13px;color:#6b7280;margin-top:3px">Select the type of appointment you need.</p>
+    <div class="services-grid" id="servicesGrid">
+      <div class="spinner-wrap"><div class="spinner"></div>Loading…</div>
+    </div>
+    <div class="step-footer">
+      <span class="step-count">Step 1 of 3</span>
+      <button class="btn-primary" id="btnS1" disabled onclick="goTo(2)">Continue →</button>
+    </div>
+  </div>
+
+  <!-- STEP 2 -->
+  <div class="page" id="p2">
+    <h3 style="font-size:17px;font-weight:700">Pick a date &amp; time</h3>
+    <p style="font-size:13px;color:#6b7280;margin-top:3px">Select an available slot for your <strong id="svcLabel"></strong>.</p>
+    <div class="dt-layout">
+      <div class="calendar-wrap">
+        <div class="cal-header">
+          <button class="cal-nav" onclick="shiftMonth(-1)">‹</button>
+          <span id="calLabel"></span>
+          <button class="cal-nav" onclick="shiftMonth(1)">›</button>
+        </div>
+        <div class="cal-grid" id="calGrid"></div>
+      </div>
+      <div class="times-wrap">
+        <div class="times-label" id="timesLabel">Available times</div>
+        <div class="times-grid" id="timesGrid">
+          <p style="grid-column:span 2;font-size:13px;color:#9ca3af">Pick a date first.</p>
+        </div>
+      </div>
+    </div>
+    <div class="step-footer">
+      <button class="btn-outline" onclick="goTo(1)">← Back</button>
+      <button class="btn-primary" id="btnS2" disabled onclick="goTo(3)">Continue →</button>
+    </div>
+  </div>
+
+  <!-- STEP 3 -->
+  <div class="page" id="p3">
+    <div class="details-layout">
+      <div class="details-form">
+        <h3 style="font-size:17px;font-weight:700">Your details</h3>
+        <p style="font-size:13px;color:#6b7280;margin-top:3px;margin-bottom:18px">We'll send a confirmation to your email.</p>
+        <div class="form-row">
+          <div class="form-group"><label>First Name</label><input id="fFirst" placeholder="Jane"/></div>
+          <div class="form-group"><label>Last Name</label><input id="fLast" placeholder="Smith"/></div>
+        </div>
+        <div class="form-group"><label>Email Address</label><input type="email" id="fEmail" placeholder="jane@example.com"/></div>
+        <div class="form-group"><label>Phone (Optional)</label><input type="tel" id="fPhone" placeholder="+1 555 000 0000"/></div>
+        <div class="form-group"><label>Notes (Optional)</label><textarea id="fNotes" placeholder="Anything we should know beforehand?"></textarea></div>
+      </div>
+      <div class="booking-summary">
+        <div class="summary-box">
+          <div class="summ-title">Your Booking</div>
+          <div class="summ-row"><span class="sl">Service</span><span class="sv" id="summSvc"></span></div>
+          <div class="summ-row"><span class="sl">Date</span><span class="sv" id="summDate"></span></div>
+          <div class="summ-row"><span class="sl">Time</span><span class="sv" id="summTime"></span></div>
+          <div class="summ-row"><span class="sl">Price</span><span class="sv" id="summPrice"></span></div>
+        </div>
+      </div>
+    </div>
+    <div class="step-footer">
+      <button class="btn-outline" onclick="goTo(2)">← Back</button>
+      <button class="btn-primary" id="btnS3" onclick="confirmBooking()">Confirm Booking ✓</button>
+    </div>
+  </div>
+
+  <!-- STEP 4 -->
+  <div class="page" id="p4">
+    <div class="confirmed-wrap">
+      <div class="check-big">✓</div>
+      <h2>You're all booked!</h2>
+      <p>Your appointment has been confirmed. A confirmation email has been sent to <strong id="confEmail"></strong>.</p>
+      <div class="conf-summary">
+        <div class="conf-row"><span class="cl">Service</span><span class="cr" id="confSvc"></span></div>
+        <div class="conf-row"><span class="cl">Date</span><span class="cr" id="confDate"></span></div>
+        <div class="conf-row"><span class="cl">Time</span><span class="cr" id="confTime"></span></div>
+        <div class="conf-row"><span class="cl">Name</span><span class="cr" id="confName"></span></div>
+        <div class="conf-row"><span class="cl">Price</span><span class="cr" id="confPrice"></span></div>
+      </div>
+      <button class="btn-outline" onclick="resetAll()">Book another appointment</button>
+    </div>
+  </div>
+
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════════════════════
+//  STEP 1: Paste your Wix site URL below (no trailing slash)
+// ══════════════════════════════════════════════════════════
+const WIX = "https://YOUR-SITE.wixsite.com/YOUR-PAGE";
+
+const API_SERVICES = WIX + "/_functions/getServices";
+const API_SLOTS    = WIX + "/_functions/getSlots";
+const API_BOOK     = WIX + "/_functions/createBooking";
+
+// ── State variables ────────────────────────────────────────
+let selService = null;
+let selDate    = null;
+let selTime    = null;
+let bookedKeys = [];
+let calYear, calMonth;
+
+const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const DNAMES = ['Su','Mo','Tu','We','Th','Fr','Sa'];
+
+const now = new Date();
+calYear = now.getFullYear();
+calMonth = now.getMonth();
+loadServices();
+
+// ── Load services ──────────────────────────────────────────
+async function loadServices() {
+  try {
+    const res  = await fetch(API_SERVICES);
+    const data = await res.json();
+    renderServices(data.services || []);
+  } catch {
+    renderServices([
+      { _id:'s1', name:'Consultation', duration:60,  price:80,  icon:'📋' },
+      { _id:'s2', name:'Follow-up',    duration:30,  price:40,  icon:'🔄' },
+      { _id:'s3', name:'Assessment',   duration:90,  price:120, icon:'📝' },
+      { _id:'s4', name:'Workshop',     duration:120, price:200, icon:'🔧' },
+    ]);
+  }
+}
+
+function renderServices(list) {
+  const grid = document.getElementById('servicesGrid');
+  grid.innerHTML = '';
+  list.forEach(svc => {
+    const card = document.createElement('div');
+    card.className = 'service-card';
+    card.innerHTML = `
+      <span class="svc-icon">${svc.icon || '📋'}</span>
+      <div class="svc-name">${svc.name}</div>
+      <div class="svc-meta">${svc.duration} min &nbsp;$${svc.price}</div>`;
+    card.onclick = () => {
+      selService = svc;
+      document.querySelectorAll('.service-card').forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+      document.getElementById('btnS1').disabled = false;
+    };
+    grid.appendChild(card);
+  });
+}
+
+// ── Step navigation ────────────────────────────────────────
+function goTo(n) {
+  for (let i = 1; i <= 4; i++) {
+    document.getElementById('p' + i).classList.toggle('active', i === n);
+    const si = document.getElementById('si' + i);
+    const sc = document.getElementById('sc' + i);
+    si.classList.remove('active', 'done');
+    if (i < n)       { si.classList.add('done');   sc.textContent = '✓'; }
+    else if (i === n){ si.classList.add('active'); sc.textContent = i;   }
+    else             { sc.textContent = i; }
+  }
+  if (n === 2) {
+    document.getElementById('svcLabel').textContent = selService.name;
+    drawCalendar();
+  }
+  if (n === 3) {
+    document.getElementById('summSvc').textContent   = `${selService.name} (${selService.duration} min)`;
+    document.getElementById('summDate').textContent  = niceDate(selDate);
+    document.getElementById('summTime').textContent  = selTime;
+    document.getElementById('summPrice').textContent = `$${selService.price}`;
+  }
+}
+
+// ── Calendar ───────────────────────────────────────────────
+function shiftMonth(delta) {
+  calMonth += delta;
+  if (calMonth > 11) { calMonth = 0; calYear++; }
+  if (calMonth < 0)  { calMonth = 11; calYear--; }
+  drawCalendar();
+}
+
+function drawCalendar() {
+  document.getElementById('calLabel').textContent = `${MONTHS[calMonth]} ${calYear}`;
+  const grid  = document.getElementById('calGrid');
+  const today = new Date(); today.setHours(0,0,0,0);
+  grid.innerHTML = DNAMES.map(d => `<div class="cal-dname">${d}</div>`).join('');
+  const firstDay    = new Date(calYear, calMonth, 1).getDay();
+  const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
+  for (let i = 0; i < firstDay; i++) grid.innerHTML += '<div class="cal-day empty"></div>';
+  for (let d = 1; d <= daysInMonth; d++) {
+    const dateObj = new Date(calYear, calMonth, d);
+    const isPast  = dateObj < today;
+    const ds      = `${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const isToday = dateObj.getTime() === today.getTime();
+    const isSel   = ds === selDate;
+    const el = document.createElement('div');
+    el.className = ['cal-day', isPast?'disabled':'', isSel?'selected':'', (isToday&&!isSel)?'today':''].filter(Boolean).join(' ');
+    el.textContent = d;
+    if (!isPast) el.onclick = () => pickDate(ds);
+    grid.appendChild(el);
+  }
+}
+
+// ── Date select ────────────────────────────────────────────
+async function pickDate(ds) {
+  selDate = ds;
+  selTime = null;
+  document.getElementById('btnS2').disabled = true;
+  drawCalendar();
+  document.getElementById('timesLabel').textContent = 'Loading…';
+  document.getElementById('timesGrid').innerHTML = '<div class="spinner-wrap"><div class="spinner"></div></div>';
+  try {
+    const res  = await fetch(`${API_SLOTS}?date=${ds}&serviceId=${selService._id}`);
+    const data = await res.json();
+    bookedKeys = data.booked || [];
+  } catch {
+    bookedKeys = [];
+  }
+  drawTimes(ds);
+}
+
+// ── Times ──────────────────────────────────────────────────
+function drawTimes(ds) {
+  const d   = new Date(ds + 'T00:00:00');
+  const mon = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()];
+  const day = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()];
+  document.getElementById('timesLabel').textContent = `Available times — ${day}, ${mon} ${d.getDate()}`;
+  const grid = document.getElementById('timesGrid');
+  grid.innerHTML = '';
+  makeSlots().forEach(time => {
+    const isBooked = bookedKeys.includes(`${ds}|${time}`);
+    const btn = document.createElement('button');
+    btn.className = 'time-btn' + (isBooked ? ' booked' : '');
+    btn.textContent = isBooked ? `${time} (booked)` : time;
+    if (!isBooked) {
+      btn.onclick = () => {
+        selTime = time;
+        document.querySelectorAll('.time-btn').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        document.getElementById('btnS2').disabled = false;
+      };
+    }
+    grid.appendChild(btn);
+  });
+}
+
+function makeSlots() {
+  const s = [];
+  for (let h = 9; h <= 16; h++) {
+    ['00','30'].forEach(m => {
+      if (h === 16 && m === '30') return;
+      s.push(`${h > 12 ? h-12 : h}:${m} ${h < 12 ? 'AM' : 'PM'}`);
+    });
+  }
+  return s;
+}
+
+// ── FIXED Confirm Booking (ONLY CHANGE HERE) ───────────────
+async function confirmBooking() {
+  const first = document.getElementById('fFirst').value.trim();
+  const last  = document.getElementById('fLast').value.trim();
+  const email = document.getElementById('fEmail').value.trim();
+
+  if (!first || !last)                       return showToast('Please enter your name.');
+  if (!email || !/\S+@\S+\.\S+/.test(email)) return showToast('Please enter a valid email.');
+
+  const btn = document.getElementById('btnS3');
+  btn.disabled = true;
+  btn.textContent = 'Booking…';
+
+  window.parent.postMessage({
+    type: "createBooking",
+    serviceId: selService._id,
+    serviceName: selService.name,
+    duration: selService.duration,
+    price: selService.price,
+    date: selDate,
+    time: selTime,
+    firstName: first,
+    lastName: last,
+    email: email,
+    phone: document.getElementById('fPhone').value.trim(),
+    notes: document.getElementById('fNotes').value.trim()
+  }, "*");
+}
+
+// ── Reset ──────────────────────────────────────────────────
+function resetAll() {
+  selService = null; selDate = null; selTime = null; bookedKeys = [];
+  ['fFirst','fLast','fEmail','fPhone','fNotes'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('btnS1').disabled = true;
+  document.querySelectorAll('.service-card').forEach(c => c.classList.remove('selected'));
+  goTo(1);
+}
+
+// ── Helpers ────────────────────────────────────────────────
+function niceDate(ds) {
+  if (!ds) return '—';
+  return new Date(ds + 'T00:00:00').toLocaleDateString('en-US', {weekday:'long',year:'numeric',month:'long',day:'numeric'});
+}
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// ── ADDED: Listen for Wix response ─────────────────────────
+window.addEventListener("message", (event) => {
+  if (event.data?.success) {
+    document.getElementById('confEmail').textContent = document.getElementById('fEmail').value;
+
+    document.getElementById('confSvc').textContent =
+      `${selService.name} (${selService.duration} min)`;
+
+    document.getElementById('confDate').textContent = niceDate(selDate);
+    document.getElementById('confTime').textContent = selTime;
+    document.getElementById('confName').textContent =
+      document.getElementById('fFirst').value + " " + document.getElementById('fLast').value;
+
+    document.getElementById('confPrice').textContent = `$${selService.price}`;
+
+    goTo(4);
+  } else if (event.data?.success === false) {
+    showToast(event.data.message || 'Booking failed');
+    document.getElementById('btnS3').disabled = false;
+    document.getElementById('btnS3').textContent = 'Confirm Booking ✓';
+  }
+});
+</script>
+</body>
+</html>

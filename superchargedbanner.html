@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Play:wght@400;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Play:wght@400;700&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #000;
+        }
+
+        .hero {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            min-height: 100vh;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Background video */
+        #bgVideo {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+            opacity: 0.90;
+        }
+
+        /* Dark black overlay for contrast */
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.20);
+            z-index: 1;
+        }
+
+        /* Content */
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 0 20px;
+            max-width: 720px;
+            width: 100%;
+        }
+
+        /* Headline */
+        .hero-headline {
+            font-size: clamp(22px, 5vw, 48px);
+            font-weight: 800;
+            color: #fff;
+            line-height: 1.2;
+            margin-bottom: 18px;
+            text-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
+            font-family: 'Play', sans-serif;
+        }
+
+        .hero-headline .red {
+            color: #e8242a;
+        }
+
+        /* Feature list */
+        .hero-features {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 28px;
+            color: #fff;
+            font-size: 18px;
+            font-weight: 500;
+            font-family: Arial, sans-serif;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Buttons */
+        .hero-buttons {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 11px 30px;
+            border-radius: 999px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.15s;
+            text-decoration: none;
+            display: inline-block;
+            letter-spacing: 0.02em;
+            font-family: "Lato", sans-serif;
+            white-space: nowrap;
+        }
+
+        .btn-primary {
+            background: #e8242a;
+            color: #fff;
+            border: 2px solid #e8242a;
+        }
+
+        .btn-primary:hover {
+            background: transparent;
+            color: #fff;
+            border: 2px solid #fff;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #fff;
+            border: 2px solid rgba(255, 255, 255, 0.85);
+        }
+
+        .btn-secondary:hover {
+            background: #C71F1F;
+            color: #fff;
+            border: 2px solid #C71F1F;
+            transform: translateY(-1px);
+        }
+
+        /* Audio toggle – invisible by default, appears on hover */
+        .audio-toggle {
+            position: absolute;
+            bottom: 24px;
+            right: 24px;
+            z-index: 10;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.45);
+            border: 1.5px solid rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s, opacity 0.3s;
+            opacity: 0;
+            pointer-events: all;
+        }
+
+        .hero:hover .audio-toggle {
+            opacity: 1;
+        }
+
+        .audio-toggle:hover {
+            background: rgba(0, 0, 0, 0.65);
+        }
+
+        .audio-toggle svg {
+            width: 20px;
+            height: 20px;
+            fill: #fff;
+        }
+
+        /* ── TABLET (max 768px) ── */
+        @media (max-width: 768px) {
+            .hero-headline {
+                font-size: clamp(20px, 6vw, 34px);
+            }
+
+            .hero-features {
+                font-size: 12px;
+            }
+
+            .btn {
+                padding: 10px 24px;
+                font-size: 13px;
+            }
+        }
+
+        /* ── MOBILE (max 480px) ── */
+        @media (max-width: 480px) {
+            .hero-content {
+                padding: 0 16px;
+            }
+
+            .hero-headline {
+                font-size: clamp(18px, 7vw, 28px);
+                line-height: 1.25;
+            }
+
+            .hero-features {
+                font-size: 11px;
+                margin-bottom: 20px;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                gap: 12px;
+                align-items: center;
+            }
+
+            .btn {
+                padding: 10px 28px;
+                font-size: 13px;
+            }
+
+            .audio-toggle {
+                bottom: 16px;
+                right: 16px;
+                width: 38px;
+                height: 38px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <section class="hero" id="hero">
+
+        <video id="bgVideo" autoplay loop muted playsinline>
+            <source src="https://video.wixstatic.com/video/4ae31d_b0753560e6e4417e882bb1d6976deb0e/1080p/mp4/file.mp4"
+                type="video/mp4">
+        </video>
+
+        <div class="hero-overlay"></div>
+
+        <div class="hero-content">
+
+            <h1 class="hero-headline">Book Your <span class="red">CPR</span> Class Today</h1>
+
+            <div class="hero-features">
+                <div class="feature-item">
+                    <span>Same Day Certification and we come to you</span>
+                </div>
+            </div>
+
+            <div class="hero-buttons">
+                <a href="" class="btn btn-primary">Book Now</a>
+                <a href="tel:8628001867" class="btn btn-secondary">Call Now</a>
+            </div>
+
+        </div>
+
+        <!-- Audio toggle – hidden until user hovers the section -->
+        <button class="audio-toggle" id="audioToggle" title="Toggle sound" aria-label="Toggle sound">
+            <svg id="iconMuted" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M16.5 12A4.5 4.5 0 0 0 14 7.97V10.18L16.45 12.63C16.48 12.43 16.5 12.22 16.5 12ZM19 12C19 12.94 18.8 13.82 18.46 14.64L19.97 16.15C20.63 14.91 21 13.5 21 12C21 7.72 18.01 4.14 14 3.23V5.29C16.89 6.15 19 8.83 19 12ZM4.27 3L3 4.27 7.73 9H3V15H7L12 20V13.27L16.25 17.52C15.58 18.04 14.83 18.45 14 18.7V20.77C15.38 20.45 16.63 19.82 17.68 18.96L19.73 21 21 19.73 12 10.73 4.27 3ZM12 4L9.91 6.09 12 8.18V4Z" />
+            </svg>
+            <svg id="iconUnmuted" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="display:none">
+                <path
+                    d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0 0 14 7.97v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77 0-4.28-2.99-7.86-7-8.77z" />
+            </svg>
+        </button>
+
+    </section>
+
+    <script>
+        var video = document.getElementById('bgVideo');
+        var btn = document.getElementById('audioToggle');
+        var iconMuted = document.getElementById('iconMuted');
+        var iconUnmuted = document.getElementById('iconUnmuted');
+
+        video.muted = true;
+        video.play();
+
+        btn.addEventListener('click', function () {
+            video.muted = !video.muted;
+            iconMuted.style.display = video.muted ? 'block' : 'none';
+            iconUnmuted.style.display = video.muted ? 'none' : 'block';
+        });
+    </script>
+
+</body>
+
+</html>
